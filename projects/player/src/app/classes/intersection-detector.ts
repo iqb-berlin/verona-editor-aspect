@@ -18,11 +18,24 @@ export class IntersectionDetector {
     this.intersectionObserver = new IntersectionObserver(
       (entries: IntersectionObserverEntry[]): void => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.intersectionDetected(entry.target);
+          /** original IntersectionObserver
+           if (entry.isIntersecting) {
+           this.intersectionDetected(entry.target);
+           }
+           */
+          const elementData = this.elements.find(e => e.element === entry.target);
+          if (elementData) {
+            if (entry.isIntersecting) {
+              console.log(`IntersectionDetector: ${elementData.id} is intersecting.`);
+              this.intersecting.emit(elementData.id);
+            } else {
+              console.log(`IntersectionDetector: ${elementData.id} is NOT intersecting.`);
+              this.intersecting.emit(null);
+            }
           }
         });
-      }, {
+      },
+      {
         root: this.root,
         rootMargin: this.constraint
       }

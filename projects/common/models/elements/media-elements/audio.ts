@@ -8,6 +8,7 @@ import { environment } from 'common/environment';
 import { AbstractIDService, PlayerElementBlueprint, UIElementType } from 'common/interfaces';
 import { PlayerElement } from 'common/models/elements/element';
 import { InstantiationEror } from 'common/errors';
+import { IntersectionDetector } from 'player/src/app/classes/intersection-detector';
 
 export class AudioElement extends PlayerElement implements AudioProperties {
   type: UIElementType = 'audio';
@@ -15,12 +16,14 @@ export class AudioElement extends PlayerElement implements AudioProperties {
   fileName: string = '';
   position?: PositionProperties;
   styling: { backgroundColor: string };
+  intersectionDetector: IntersectionDetector;
 
   static title: string = 'Audio';
   static icon: string = 'volume_up';
 
   constructor(element?: Partial<AudioProperties>, idService?: AbstractIDService) {
     super({ type: 'audio', ...element }, idService);
+    this.intersectionDetector = new IntersectionDetector(document, '0px 0px 0px 0px');
     if (isAudioProperties(element)) {
       this.src = element.src;
       this.fileName = element.fileName;
